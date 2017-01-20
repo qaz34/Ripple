@@ -30,26 +30,26 @@ public class Map : MonoBehaviour, IMapper
     {
         get
         {
-			bool[,] b = new bool[height, width];
-			for (int i = 0; i < width; i++)
-			{
-				for (int j = 0; j < height; j++)
-				{
-					b[j,i] = m_tileGrid[j + i * height];
-				}
-			}
-			return b;
+            bool[,] b = new bool[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    b[x, y] = m_tileGrid[x + y * width];
+                }
+            }
+            return b;
         }
     }
     public void SetBoolArray()
     {
         m_tileGrid = new bool[width * height];
 
-        for (int i = 0; i < width; i++)
+        for (int x = 0; x < width; x++)
         {
-            for (int j = 0; j < height; j++)
+            for (int y = 0; y < height; y++)
             {
-                m_tileGrid[i + j * width] = true;
+                m_tileGrid[x + y * width] = true;
             }
         }
     }
@@ -60,29 +60,30 @@ public class Map : MonoBehaviour, IMapper
     public void OnDrawGizmos()
     {
         if (m_tileGrid != null)
-            for (int i = 0; i < width; i++)
+            for (int x = 0; x < width; x++)
             {
-                for (int j = 0; j < height; j++)
+                for (int y = 0; y < height; y++)
                 {
-                    if (!m_tileGrid[i + j * width])
-                        Gizmos.DrawCube(new Vector3(j - (height / 2) + .5f, i - (width / 2) + .5f), new Vector3(1, 1));
+                    if (!m_tileGrid[x + y * width])
+                        Gizmos.DrawCube(new Vector3(x - (width / 2) + .5f, y - (height / 2) + .5f), new Vector3(1, 1));
                 }
             }
         float _x = transform.position.x;
         float _y = transform.position.y;
         //outerLines
-        Gizmos.DrawLine(new Vector3(height / 2 + _x, width / 2 + _y), new Vector3(height / 2 + _x, -width / 2 + _y));
-        Gizmos.DrawLine(new Vector3(height / 2 + _x, width / 2 + _y), new Vector3(-height / 2 + _x, width / 2 + _y));
-        Gizmos.DrawLine(new Vector3(-height / 2 + _x, -width / 2 + _y), new Vector3(height / 2 + _x, -width / 2 + _y));
-        Gizmos.DrawLine(new Vector3(-height / 2 + _x, -width / 2 + _y), new Vector3(-height / 2 + _x, width / 2 + _y));
+        Gizmos.DrawLine(new Vector3(width / 2 + _y, height / 2 + _x), new Vector3(-width / 2 + _y, height / 2 + _x));
+        Gizmos.DrawLine(new Vector3(width / 2 + _y, height / 2 + _x), new Vector3(width / 2 + _y, -height / 2 + _x));
+        Gizmos.DrawLine(new Vector3(-width / 2 + _y, -height / 2 + _x), new Vector3(-width / 2 + _y, height / 2 + _x));
+        Gizmos.DrawLine(new Vector3(-width / 2 + _y, -height / 2 + _x), new Vector3(width / 2 + _y, -height / 2 + _x));
+
         //grid
-        for (int y = -width / 2; y < width / 2; y++)
+        for (int y = -height / 2; y < height / 2; y++)
         {
-            Gizmos.DrawLine(new Vector3(-height / 2, y), new Vector3(height / 2, y));
+            Gizmos.DrawLine(new Vector3(-width / 2, y), new Vector3(width / 2, y));
         }
-        for (int x = -height / 2; x < height / 2; x++)
+        for (int x = -width / 2; x < width / 2; x++)
         {
-            Gizmos.DrawLine(new Vector3(x, -width / 2), new Vector3(x, width / 2));
+            Gizmos.DrawLine(new Vector3(x, -height / 2), new Vector3(x, height / 2));
         }
     }
 }

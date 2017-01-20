@@ -23,8 +23,8 @@ public class LevelEditor : Editor
         if (Physics.Raycast(ray, out hit, Mathf.Infinity) && e.type == EventType.keyDown && e.keyCode == KeyCode.L && first)
         {
             first = false;
-            Vector3 local_point = new Vector3(Mathf.Floor(hit.point.x + mapGen.height / 2), Mathf.Floor(hit.point.y + mapGen.width / 2));
-            mapGen.SetBoolArray((int)local_point.y, (int)local_point.x, !mapGen.m_tileGrid[(int)local_point.y + (int)local_point.x * mapGen.width]);
+            Vector3 local_point = new Vector3(Mathf.Floor(hit.point.x + mapGen.width / 2), Mathf.Floor(hit.point.y + mapGen.height / 2));
+            mapGen.SetBoolArray((int)local_point.x, (int)local_point.y, !mapGen.m_tileGrid[(int)local_point.x + (int)local_point.y * mapGen.width]);
         }
         else if (e.type == EventType.keyUp && e.keyCode == KeyCode.L)
             first = true;
@@ -35,12 +35,12 @@ public class LevelEditor : Editor
         GUILayout.BeginHorizontal();
 
         GUILayout.Label(new GUIContent("Map height", "The height of the map"));
-        mapGen.width = EditorGUILayout.IntSlider(mapGen.width + mapGen.width % 2, 2, 100);
+        mapGen.height = EditorGUILayout.IntSlider(mapGen.height + mapGen.height % 2, 2, 30);
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         GUILayout.Label(new GUIContent("Map width", "The width of the map"));
-        mapGen.height = EditorGUILayout.IntSlider(mapGen.height - mapGen.height % 2, 2, 100);
+        mapGen.width = EditorGUILayout.IntSlider(mapGen.width - mapGen.width % 2, 2, 30);
         GUILayout.EndHorizontal();
 
         if (GUILayout.Button(new GUIContent("Generate Map", "Some background stuff")))
@@ -51,7 +51,7 @@ public class LevelEditor : Editor
             Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/HitBack.prefab", typeof(GameObject));
             GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
             clone.transform.SetParent(mapGen.transform);
-            clone.GetComponent<BoxCollider>().size = new Vector3(mapGen.height, mapGen.width);
+            clone.GetComponent<BoxCollider>().size = new Vector3(mapGen.width, mapGen.height);
             mapGen.SetBoolArray();
         }
         SceneView.RepaintAll();

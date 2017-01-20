@@ -46,10 +46,8 @@ public class WaveSim : MonoBehaviour {
 				}
 			}
 		}
-		Disturb (1, waveGrid.GetLength (0) / 2, waveGrid.GetLength (1) / 2);
-		Disturb (1, waveGrid.GetLength (0) / 2+1, waveGrid.GetLength (1) / 2);
-		Disturb (1, waveGrid.GetLength (0) / 2+2, waveGrid.GetLength (1) / 2);
-		Disturb (1, waveGrid.GetLength (0) / 2+3, waveGrid.GetLength (1) / 2);
+		Disturb (100, waveGrid.GetLength (0) / 2, waveGrid.GetLength (1) / 2);
+
 		transform.position += new Vector3 (-waveGrid.GetLength (0) / (2 * map.scaleFactor * deltaSScale), -waveGrid.GetLength (1) / (2 * map.scaleFactor * deltaSScale), 0);
 	}
 
