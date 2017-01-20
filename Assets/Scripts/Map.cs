@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+[System.Serializable]
 public class Map : MonoBehaviour, IMapper
 {
     public int width;
     public int height;
-    int scale = 1;
-    private static Texture2D _staticRectTexture;
-    private static GUIStyle _staticRectStyle;
+    [SerializeField]
+    public bool[] m_tileGrid;
+    void Start()
+    {
+    }
 
-    public bool[,] m_tileGrid;
     public int scaleFactor
     {
         get
         {
-            return scale;
+            return 1;
         }
     }
     public Vector3 worldPos
@@ -28,36 +30,36 @@ public class Map : MonoBehaviour, IMapper
     {
         get
         {
-            return m_tileGrid;
+            return new bool[1, 1];
         }
     }
-    public static void GUIDrawRect(Rect position, Color color)
+    public void SetBoolArray()
     {
-        if (_staticRectTexture == null)
+        m_tileGrid = new bool[width * height];
+
+        for (int i = 0; i < width; i++)
         {
-            _staticRectTexture = new Texture2D(1, 1);
+            for (int j = 0; j < height; j++)
+            {
+                m_tileGrid[i + j * width] = true;
+            }
         }
-
-        if (_staticRectStyle == null)
-        {
-            _staticRectStyle = new GUIStyle();
-        }
-
-        _staticRectTexture.SetPixel(0, 0, color);
-        _staticRectTexture.Apply();
-
-        _staticRectStyle.normal.background = _staticRectTexture;
-
-        GUI.Box(position, GUIContent.none, _staticRectStyle);
     }
-
-    void OnGUI()
+    public void SetBoolArray(int x, int y, bool value)
     {
-        GUIDrawRect(new Rect(1, 1, 1, 1), Color.red);
+        m_tileGrid[x + y * width] = value;
     }
-
     public void OnDrawGizmos()
     {
+        if (m_tileGrid != null)
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (!m_tileGrid[i + j * width])
+                        Gizmos.DrawCube(new Vector3(j - (height / 2) + .5f, i - (width / 2) + .5f), new Vector3(1, 1));
+                }
+            }
         float _x = transform.position.x;
         float _y = transform.position.y;
         //outerLines
@@ -68,7 +70,7 @@ public class Map : MonoBehaviour, IMapper
         //grid
         for (int y = -width / 2; y < width / 2; y++)
         {
-            Gizmos.DrawLine(new Vector3(-height / 2, y), new Vector3(height / 2, y));           
+            Gizmos.DrawLine(new Vector3(-height / 2, y), new Vector3(height / 2, y));
         }
         for (int x = -height / 2; x < height / 2; x++)
         {

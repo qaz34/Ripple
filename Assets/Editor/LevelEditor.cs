@@ -3,29 +3,35 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+[CanEditMultipleObjects]
 [CustomEditor(typeof(Map))]
 public class LevelEditor : Editor
 {
     Map mapGen;
+    bool first;
+    SerializedProperty gridArray;
     public void OnEnable()
     {
-        mapGen = (Map)target;
-        SceneView.onSceneGUIDelegate += MapUpdate;
+        mapGen = (Map)target;      
     }
-    void MapUpdate(SceneView sceneView)
+    void OnSceneGUI()
     {
-        
+        EditorUtility.SetDirty(mapGen);
         Event e = Event.current;
         Ray ray = Camera.current.ScreenPointToRay(new Vector2(e.mousePosition.x, Camera.current.pixelHeight - e.mousePosition.y));
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && e.keyCode == KeyCode.L)
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity) && e.type == EventType.keyDown && e.keyCode == KeyCode.L && first)
         {
+            first = false;
             Vector3 local_point = new Vector3(Mathf.Floor(hit.point.x + mapGen.height / 2), Mathf.Floor(hit.point.y + mapGen.width / 2));
-            
+            mapGen.SetBoolArray((int)local_point.y, (int)local_point.x, !mapGen.m_tileGrid[(int)local_point.y + (int)local_point.x * mapGen.width]);
         }
+        else if (e.type == EventType.keyUp && e.keyCode == KeyCode.L)
+            first = true;
     }
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
         GUILayout.BeginHorizontal();
 
         GUILayout.Label(new GUIContent("Map height", "The height of the map"));
@@ -46,8 +52,9 @@ public class LevelEditor : Editor
             GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
             clone.transform.SetParent(mapGen.transform);
             clone.GetComponent<BoxCollider>().size = new Vector3(mapGen.height, mapGen.width);
-            mapGen.m_tileGrid = new bool[mapGen.width, mapGen.height];
+            mapGen.SetBoolArray();
         }
         SceneView.RepaintAll();
+        
     }
 }
