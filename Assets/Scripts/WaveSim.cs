@@ -13,17 +13,17 @@ public struct WaveUnit
 public class WaveSim : MonoBehaviour {
 	public IMapper map = new TestMapper();
 	public int deltaSScale = 10;
-	public float decayFactor = 0.001f;
+	public float decayFactor = 0.99f;
 	WaveUnit[,] waveGrid;
 	Color[] waveColours;
 	Texture2D tex;
 	Sprite texSprite;
 	SpriteRenderer sr;
-	bool init;
-	float value;
 
 	// Use this for initialization
 	void Start () {
+		map = GameObject.FindGameObjectWithTag ("Map").GetComponent<Map>();
+
 		sr = GetComponent<SpriteRenderer> ();
 		waveGrid = new WaveUnit[map.tileGrid.GetLength(0) * map.scaleFactor * deltaSScale, map.tileGrid.GetLength(1) * map.scaleFactor * deltaSScale];
 		tex = new Texture2D(waveGrid.GetLength (0), waveGrid.GetLength (1));
@@ -56,9 +56,7 @@ public class WaveSim : MonoBehaviour {
 	Color mapColour(float x)
 	{
 
-		Color c = Color.HSVToRGB(value, 1, 1);
-		c.a = x;
-		return c;
+		return new Color(1,1,1,x);
 	}
 
 	// Update is called once per frame
@@ -71,10 +69,6 @@ public class WaveSim : MonoBehaviour {
 				waveGrid [i, j].acceleration = x + y;
 			}
 		}
-
-		value += Time.deltaTime/5;
-		if (value > 1f)
-			value -= 1;
 		for (int i = 0; i < waveGrid.GetLength (0); i++) {
 			for (int j = 0; j < waveGrid.GetLength (1); j++) {
 				waveGrid [i, j].velocity += waveGrid [i, j].acceleration * Time.deltaTime;

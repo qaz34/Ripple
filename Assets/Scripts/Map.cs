@@ -30,7 +30,15 @@ public class Map : MonoBehaviour, IMapper
     {
         get
         {
-            return new bool[1, 1];
+			bool[,] b = new bool[height, width];
+			for (int i = 0; i < width; i++)
+			{
+				for (int j = 0; j < height; j++)
+				{
+					b[j,i] = m_tileGrid[j + i * height];
+				}
+			}
+			return b;
         }
     }
     public void SetBoolArray()
