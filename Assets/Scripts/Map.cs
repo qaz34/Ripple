@@ -10,6 +10,21 @@ public class Map : MonoBehaviour, IMapper
     public bool[] m_tileGrid;
     void Start()
     {
+        int _width = tileGrid.GetLength(0);
+        int _height = tileGrid.GetLength(1);
+        Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/HitBack.prefab", typeof(GameObject));
+        for (int x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                if (tileGrid[x, y])
+                {
+                    GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+                    clone.transform.SetParent(transform);
+                    clone.transform.position = new Vector3(x + .5f - _width / 2, y + .5f - _height / 2);
+                }
+            }
+        }
     }
 
     public int scaleFactor
@@ -59,7 +74,7 @@ public class Map : MonoBehaviour, IMapper
     }
     public void OnDrawGizmos()
     {
-        if (m_tileGrid != null)
+        if (m_tileGrid.Length == width * height)
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
