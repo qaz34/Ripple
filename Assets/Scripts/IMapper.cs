@@ -3,19 +3,23 @@ using UnityEngine;
 
 public interface IMapper
 {
-	float scaleFactor
-	{
-		get;
-	}
+    int scaleFactor
+    {
+        //square size
+        get;
+    }
 
-	Vector3 worldPos
-	{
-		get;
-	}
+    Vector3 worldPos
+    {
+        //center
+        get;
+    }
 
-	bool[,] tileGrid {
-		get;
-	}
+    bool[,] tileGrid
+    {
+        //tilegrid
+        get;
+    }
 }
 
 
