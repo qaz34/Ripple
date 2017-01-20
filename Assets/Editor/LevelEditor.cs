@@ -51,6 +51,7 @@ public class LevelEditor : Editor
             Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/HitBack.prefab", typeof(GameObject));
             GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
             clone.transform.SetParent(mapGen.transform);
+            clone.layer = 8;
             clone.GetComponent<BoxCollider>().size = new Vector3(mapGen.width, mapGen.height);
             mapGen.SetBoolArray();
         }
