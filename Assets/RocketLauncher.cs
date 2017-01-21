@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Pistol : Weapon
+public class RocketLauncher : Weapon
 {
     public override GameObject Fire()
     {

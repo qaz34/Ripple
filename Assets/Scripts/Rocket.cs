@@ -1,22 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BulletWave : MonoBehaviour
-{
-    WaveSim ws;
-    public float intensity = 1;
+public class Rocket : MonoBehaviour {
+
+    GameObject explosionPrefab;
     // Use this for initialization
     void Start()
     {
-        ws = GameObject.FindGameObjectWithTag("Wave").GetComponent<WaveSim>();
+      
+   
     }
     void OnCollisionEnter(Collision col)
     {
+        //Go Boom//
         Destroy(gameObject);
     }
     // Update is called once per frame
     void Update()
-    {      
-            ws.Disturb(intensity, transform.position);
+    {
+      
     }
 }
