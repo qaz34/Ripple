@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using InControl;
 
 public class Spawner : MonoBehaviour {
 
@@ -47,10 +48,12 @@ public class Spawner : MonoBehaviour {
 			}
 		}
 		GameObject go = Instantiate<GameObject> (playerPrefab.gameObject);
+        
 		go.layer = LayerMask.NameToLayer ("Player" + (player + 1));
 		players [player] =  go.GetComponent<CharController>();
 		players [player].transform.position = new Vector3(x - (map.tileGrid.GetLength (0) / 2), y - (map.tileGrid.GetLength(1)/2));
-		ws.Disturb (1f, players [player].transform.position);
+        players [player].device = InputManager.Devices[player];
+        ws.Disturb (1f, players [player].transform.position);
 		players [player].player = player+1;
 		spawning [player] = false;
 		coroutineCalled [player] = false;

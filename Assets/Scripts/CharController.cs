@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InControl;
+
 [System.Serializable]
 public struct PlayerSounds
 {
@@ -9,6 +11,7 @@ public struct PlayerSounds
 [RequireComponent(typeof(CharacterController))]
 public class CharController : MonoBehaviour
 {
+    public InputDevice device;
     public PlayerSounds sounds;
     public float speed = 10;
     CharacterController m_cc;
@@ -24,13 +27,15 @@ public class CharController : MonoBehaviour
     {
         m_cc = GetComponent<CharacterController>();
         ws = GameObject.FindGameObjectWithTag("Wave").GetComponent<WaveSim>();
-		transform.rotation = Quaternion.Euler (90, 0, 0);
+        transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        move = new Vector3(Input.GetAxis("Horizontal" + player.ToString()), Input.GetAxis("Vertical" + player.ToString()), 0).normalized * Time.deltaTime * speed;
+         
+
+        move = device.LeftStick.Vector * Time.deltaTime * speed;
         m_cc.Move(move);
         transform.position.Set(transform.position.x, transform.position.y, 0);
         if (move.magnitude > 0)
@@ -43,31 +48,31 @@ public class CharController : MonoBehaviour
             timer = 0;
             ws.Disturb(stepIntensity, transform.position);
         }
-        Vector3 aim = new Vector3(Input.GetAxis("AimHorizontal" + player.ToString()), Input.GetAxis("AimVertical" + player.ToString()));
-		if (aim.normalized.magnitude != 0)
-			transform.rotation = Quaternion.LookRotation (aim.normalized);
-		else if (move.normalized.magnitude != 0)
-			transform.rotation = Quaternion.LookRotation (move.normalized);
+        Vector3 aim = device.RightStick.Vector;
+        if (aim.normalized.magnitude != 0)
+            transform.rotation = Quaternion.LookRotation(aim.normalized);
+        else if (move.normalized.magnitude != 0)
+            transform.rotation = Quaternion.LookRotation(move.normalized);
         if (GetComponent<WeaponControler>() != null)
         {
-            if (Input.GetAxis("Fire1" + player.ToString()) != 0)
+            if (device.RightTrigger.IsPressed)
             {
                 GetComponent<WeaponControler>().Fire(pressed);
                 pressed = true;
             }
-            else if (Input.GetAxis("Fire1" + player.ToString()) == 0)
+            else if (device.RightTrigger.WasReleased)
             {
                 pressed = false;
             }
-            if (Input.GetButtonDown("Swap" + player.ToString()))
+            if (device.LeftBumper.WasPressed || device.RightBumper.WasPressed)
             {
-                GetComponent<WeaponControler>().Equip((int)Input.GetAxisRaw("Swap" + player.ToString()));
+                GetComponent<WeaponControler>().Equip((int)(device.RightBumper.Value-device.LeftBumper.Value));
             }
         }
     }
 
-	void OnDestroy()
-	{
-		ws.Disturb (10, transform.position);
-	}
+    void OnDestroy()
+    {
+        ws.Disturb(10, transform.position);
+    }
 }

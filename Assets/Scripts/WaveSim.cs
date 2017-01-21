@@ -19,7 +19,8 @@ public class WaveSim : MonoBehaviour {
 	public float wallConductivity = 0.01f;
 	public float spaceConductivity = 1;
 	public float waveDisplayThreshold;
-	private Texture2D tex;
+    public Color waveColour;
+    private Texture2D tex;
 	private byte[] texBytes;
 	WaveUnit[,] waveGrid;
 	MeshRenderer mr;
@@ -31,9 +32,12 @@ public class WaveSim : MonoBehaviour {
 		waveGrid = new WaveUnit[map.tileGrid.GetLength(0) * map.scaleFactor * deltaSScale, map.tileGrid.GetLength(1) * map.scaleFactor * deltaSScale];
 		tex = new Texture2D (waveGrid.GetLength (0), waveGrid.GetLength (1), TextureFormat.RGBA32, false);
 		texBytes = new byte[waveGrid.GetLength (0)*waveGrid.GetLength (1)*4];
-		for (int i = 0; i < texBytes.Length; i++) {
-			texBytes [i] = 255;
-		}
+		for (int i = 0; i < texBytes.Length; i+= 4) {
+			texBytes [i] = (byte)(waveColour.r * 255);
+            texBytes[i+1] = (byte)(waveColour.g * 255);
+            texBytes[i+2] = (byte)(waveColour.b * 255);
+            texBytes[i+3] = (byte)(waveColour.a * 255);
+        }
 		for (int i = 0; i < map.tileGrid.GetLength(0); i++) {
 			for (int j = 0; j < map.tileGrid.GetLength (1); j++) {
 				if (map.tileGrid [i, j]) {

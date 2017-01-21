@@ -41,11 +41,11 @@ public class Weapon : MonoBehaviour
     }
     public virtual GameObject Fire(Transform playerLoc, bool pressed)
     {
-        if (bullets == 0 && capacity != 0)
-        {
-            Reload();
-            return null;
-        }
+        //if (bullets == 0 && capacity != 0)
+        //{
+        //    Reload();
+        //    return null;
+        //}
         if (Time.time - lastFired > triggerDelay)
         {
             sounds.audioSource.PlayOneShot(sounds.fire, .05f);
