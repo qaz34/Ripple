@@ -18,6 +18,7 @@ public class WaveSim : MonoBehaviour {
 	public float timeScale = 2;
 	public float wallConductivity = 0.01f;
 	public float spaceConductivity = 1;
+	public float waveDisplayThreshold;
 	private Texture2D tex;
 	private byte[] texBytes;
 	WaveUnit[,] waveGrid;
@@ -69,10 +70,13 @@ public class WaveSim : MonoBehaviour {
 				waveGrid [i, j].magnitude += waveGrid [i, j].velocity * Time.deltaTime * timeScale;
 				waveGrid [i, j].magnitude *= decayFactor;
 				waveGrid [i, j].magnitude = Mathf.Max (0, waveGrid [i, j].magnitude);
-				if (waveGrid [i, j].magnitude > 1) {
-					print (waveGrid [i, j].magnitude);
+				if (waveGrid [i, j].magnitude < 0.02f) {
+					texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(0);
+				} else {
+					texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(500*waveGrid[i,j].magnitude);
 				}
-				texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(254.53f/(1 + (25.35f*Mathf.Exp(-9.17f*waveGrid[i,j].magnitude))));
+				//texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(254.53f/(1 + (25.35f*Mathf.Exp(-9.17f*waveGrid[i,j].magnitude))));
+
 			}
 		}
 
