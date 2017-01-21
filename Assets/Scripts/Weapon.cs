@@ -50,8 +50,8 @@ public class Weapon : MonoBehaviour
         {
             sounds.audioSource.PlayOneShot(sounds.fire, .05f);
            GameObject bullet = Instantiate<GameObject>(ammunition);
+			bullet.layer = playerLoc.gameObject.layer;
             bullet.transform.position = playerLoc.position;
-            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), playerLoc.GetComponent<Collider>());
             lastFired = Time.time;
             bullets--;
             return bullet;

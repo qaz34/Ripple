@@ -12,6 +12,9 @@ public class BulletWave : MonoBehaviour
     }
     void OnCollisionEnter(Collision col)
     {
+		if (col.gameObject.tag == "Player") {
+			Destroy (col.gameObject);
+		}
         Destroy(gameObject);
     }
     // Update is called once per frame

@@ -43,11 +43,13 @@ public class Spawner : MonoBehaviour {
 			}
 		}
 		GameObject go = Instantiate<GameObject> (playerPrefab.gameObject);
+		go.layer = LayerMask.NameToLayer ("Player" + (player + 1));
 		players [player] =  go.GetComponent<CharController>();
 		players [player].transform.position = new Vector3(x - (map.tileGrid.GetLength (0) / 2), y - (map.tileGrid.GetLength(1)/2));
-		ws.Disturb (1, players [player].transform.position);
+		ws.Disturb (0.6f, players [player].transform.position);
 		players [player].player = player+1;
 		spawning [player] = false;
+		coroutineCalled [player] = false;
 
 	}
 
@@ -57,6 +59,7 @@ public class Spawner : MonoBehaviour {
 		for (int i = 0; i < players.Length; i++) {
 			if (players [i] == null && !spawning[i]) {
 				scores [(i + 1) % 2]++;
+				print (scores [0] + " " + scores [1]);
 				spawning [i] = true;
 			}
 

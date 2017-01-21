@@ -31,7 +31,6 @@ public class CharController : MonoBehaviour
     void Update()
     {
         move = new Vector3(Input.GetAxis("Horizontal" + player.ToString()), Input.GetAxis("Vertical" + player.ToString()), 0).normalized * Time.deltaTime * speed;
-        print(move);
         m_cc.Move(move);
         transform.position.Set(transform.position.x, transform.position.y, 0);
         if (move.magnitude > 0)
@@ -66,4 +65,9 @@ public class CharController : MonoBehaviour
             }
         }
     }
+
+	void OnDestroy()
+	{
+		ws.Disturb (10, transform.position);
+	}
 }
