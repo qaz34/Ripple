@@ -33,7 +33,7 @@ public class CharController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         
+
 
         move = device.LeftStick.Vector * Time.deltaTime * speed;
         m_cc.Move(move);
@@ -55,19 +55,34 @@ public class CharController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(move.normalized);
         if (GetComponent<WeaponControler>() != null)
         {
-			if (device.RightBumper.IsPressed)
+            if (device.RightBumper.IsPressed)
             {
                 GetComponent<WeaponControler>().Fire(pressed);
                 pressed = true;
             }
-			else if (device.RightBumper.WasReleased)
+            else if (device.RightBumper.WasReleased)
             {
                 pressed = false;
             }
-			if (device.Action2.WasPressed || device.Action1.WasPressed)
+            if (device.AnyButton.WasPressed)
             {
-                GetComponent<WeaponControler>().Equip((int)(device.Action2.Value-device.Action1.Value));
+                int wep = -1;
+                if (device.Action1.WasPressed)
+                    wep = 0;
+                else if (device.Action2.WasPressed)
+                    wep = 1;
+                else if (device.Action3.WasPressed)
+                    wep = 2;
+                else if (device.Action4.WasPressed)
+                    wep = 3;
+                if (wep != -1)
+                    GetComponent<WeaponControler>().Equip(wep);
+
             }
+            //if (device.Action2.WasPressed || device.Action1.WasPressed)
+            //         {
+            //             GetComponent<WeaponControler>().Equip((int)(device.Action2.Value-device.Action1.Value));
+            //         }
         }
     }
 

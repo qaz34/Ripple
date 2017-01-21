@@ -18,14 +18,9 @@ public class WeaponControler : MonoBehaviour
     }
     // Update is called once per frame
     public void Equip(int weapon)
-    {
-        equipWeapon = equipWeapon + weapon;
-        if (equipWeapon < 0)
-            equipWeapon = weapons.Count - 1;
-        else
-            equipWeapon = equipWeapon % weapons.Count;
+    {        
         Destroy(equipWep);
-        equipWep = Instantiate(weapons[equipWeapon]);
+        equipWep = Instantiate(weapons[weapon]);
         equipWep.transform.parent = transform;
     }
 }
