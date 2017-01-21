@@ -6,7 +6,7 @@ public class Menu : MonoBehaviour
 
     public void StartLevel()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("First Level");
     }
     public void close()
     {

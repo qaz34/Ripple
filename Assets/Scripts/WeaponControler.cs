@@ -3,8 +3,14 @@ using System.Collections.Generic;
 
 public class WeaponControler : MonoBehaviour
 {
+	public string weapName
+	{
+		get {
+			return weapons[equipWeapon].GetComponent<Weapon>().gunName;
+		}
+	}
     public List<GameObject> weapons = new List<GameObject>();
-    public int equipWeapon;
+    public int equipWeapon = 0;
     GameObject equipWep;
     // Use this for initialization
     void Start()
@@ -18,7 +24,8 @@ public class WeaponControler : MonoBehaviour
     }
     // Update is called once per frame
     public void Equip(int weapon)
-    {        
+    {    
+		equipWeapon = weapon;
         Destroy(equipWep);
         equipWep = Instantiate(weapons[weapon]);
         equipWep.transform.parent = transform;

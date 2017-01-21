@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using InControl;
 
@@ -9,6 +10,7 @@ public struct PlayerSounds
     public AudioSource audioSource;
 }
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(WeaponControler))]
 public class CharController : MonoBehaviour
 {
     public InputDevice device;
@@ -16,19 +18,30 @@ public class CharController : MonoBehaviour
     public float speed = 10;
     CharacterController m_cc;
     WaveSim ws;
+	Text t;
+	WeaponControler wc;
     Vector3 move;
     float timer = 0;
     public float stepFreq = 0.2f;
     public float stepIntensity = 0.5f;
     public int player = 1;
+
     bool pressed = false;
     // Use this for initialization
     void Start()
     {
+		wc = GetComponent<WeaponControler> ();
         m_cc = GetComponent<CharacterController>();
         ws = GameObject.FindGameObjectWithTag("Wave").GetComponent<WaveSim>();
         transform.rotation = Quaternion.Euler(90, 0, 0);
+		t = GameObject.FindGameObjectWithTag("P" + player + "WeapText").GetComponent<Text>();
+		t.text = wc.weapName;
     }
+
+	void Awake()
+	{
+		
+	}
 
     // Update is called once per frame
     void Update()
@@ -75,10 +88,12 @@ public class CharController : MonoBehaviour
                     wep = 2;
                 else if (device.Action4.WasPressed)
                     wep = 3;
-                if (wep != -1)
-                    GetComponent<WeaponControler>().Equip(wep);
+				if (wep != -1) {
+					GetComponent<WeaponControler> ().Equip (wep);
+				}
 
             }
+			t.text = wc.weapName;
             //if (device.Action2.WasPressed || device.Action1.WasPressed)
             //         {
             //             GetComponent<WeaponControler>().Equip((int)(device.Action2.Value-device.Action1.Value));
