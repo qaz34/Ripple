@@ -24,6 +24,7 @@ public class CharController : MonoBehaviour
     {
         m_cc = GetComponent<CharacterController>();
         ws = GameObject.FindGameObjectWithTag("Wave").GetComponent<WaveSim>();
+		transform.rotation = Quaternion.Euler (90, 0, 0);
     }
 
     // Update is called once per frame
@@ -44,8 +45,10 @@ public class CharController : MonoBehaviour
             ws.Disturb(stepIntensity, transform.position);
         }
         Vector3 aim = new Vector3(Input.GetAxis("AimHorizontal" + player.ToString()), Input.GetAxis("AimVertical" + player.ToString()));
-        if (aim.normalized.magnitude != 0)
-            transform.rotation = Quaternion.LookRotation(aim.normalized);
+		if (aim.normalized.magnitude != 0)
+			transform.rotation = Quaternion.LookRotation (aim.normalized);
+		else if (move.normalized.magnitude != 0)
+			transform.rotation = Quaternion.LookRotation (move.normalized);
         if (GetComponent<WeaponControler>() != null)
         {
             if (Input.GetAxis("Fire1" + player.ToString()) != 0)
