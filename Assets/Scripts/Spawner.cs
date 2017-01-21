@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Spawner : MonoBehaviour {
 
 	IMapper map;
 	WaveSim ws;
+	Text t;
 	public CharController playerPrefab;
 	CharController[] players;
 	public int[] scores;
@@ -21,6 +23,8 @@ public class Spawner : MonoBehaviour {
 		spawning [0] = spawning [1] = coroutineCalled[0] = coroutineCalled[1] = true;
 		ws = GameObject.FindGameObjectWithTag ("Wave").GetComponent<WaveSim> ();
 		map = GameObject.FindGameObjectWithTag ("Map").GetComponent<Map>();
+		t = GameObject.FindGameObjectWithTag ("ScoreText").GetComponent<Text> ();
+		t.text = "0:0";
 		StartCoroutine(spawn (0));
 		StartCoroutine(spawn (1));
 	}
@@ -46,7 +50,7 @@ public class Spawner : MonoBehaviour {
 		go.layer = LayerMask.NameToLayer ("Player" + (player + 1));
 		players [player] =  go.GetComponent<CharController>();
 		players [player].transform.position = new Vector3(x - (map.tileGrid.GetLength (0) / 2), y - (map.tileGrid.GetLength(1)/2));
-		ws.Disturb (0.6f, players [player].transform.position);
+		ws.Disturb (1f, players [player].transform.position);
 		players [player].player = player+1;
 		spawning [player] = false;
 		coroutineCalled [player] = false;
@@ -59,7 +63,6 @@ public class Spawner : MonoBehaviour {
 		for (int i = 0; i < players.Length; i++) {
 			if (players [i] == null && !spawning[i]) {
 				scores [(i + 1) % 2]++;
-				print (scores [0] + " " + scores [1]);
 				spawning [i] = true;
 			}
 
@@ -67,8 +70,10 @@ public class Spawner : MonoBehaviour {
 				StartCoroutine (spawn (i, true));
 				coroutineCalled [i] = true;
 			}
-			
+				
+
 		}
 
+		t.text = scores [0] + ":" + scores [1];
 	}
 }
