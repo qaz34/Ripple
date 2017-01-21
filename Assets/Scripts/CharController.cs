@@ -1,10 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-
+[System.Serializable]
+public struct PlayerSounds
+{
+    public AudioClip step;
+    public AudioSource audioSource;
+}
 [RequireComponent(typeof(CharacterController))]
 public class CharController : MonoBehaviour
 {
+    public PlayerSounds sounds;
     public float speed = 10;
     CharacterController m_cc;
     WaveSim ws;
@@ -13,6 +18,7 @@ public class CharController : MonoBehaviour
     public float stepFreq = 0.2f;
     public float stepIntensity = 0.5f;
     public int player = 1;
+    bool pressed = false;
     // Use this for initialization
     void Start()
     {
@@ -24,7 +30,7 @@ public class CharController : MonoBehaviour
     void Update()
     {
         move = new Vector3(Input.GetAxis("Horizontal" + player.ToString()), Input.GetAxis("Vertical" + player.ToString()), 0).normalized * Time.deltaTime * speed;
-		print (move);
+        print(move);
         m_cc.Move(move);
         transform.position.Set(transform.position.x, transform.position.y, 0);
         if (move.magnitude > 0)
@@ -33,6 +39,7 @@ public class CharController : MonoBehaviour
         }
         if (timer > stepFreq)
         {
+            sounds.audioSource.PlayOneShot(sounds.step);
             timer = 0;
             ws.Disturb(stepIntensity, transform.position);
         }
@@ -43,7 +50,12 @@ public class CharController : MonoBehaviour
         {
             if (Input.GetAxis("Fire1" + player.ToString()) != 0)
             {
-                GetComponent<WeaponControler>().Fire();
+                GetComponent<WeaponControler>().Fire(pressed);
+                pressed = true;
+            }
+            else if (Input.GetAxis("Fire1" + player.ToString()) == 0)
+            {
+                pressed = false;
             }
             if (Input.GetButtonDown("Swap" + player.ToString()))
             {

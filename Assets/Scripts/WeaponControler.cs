@@ -12,9 +12,9 @@ public class WeaponControler : MonoBehaviour
         equipWep = Instantiate(weapons[equipWeapon]);
         equipWep.transform.parent = transform;
     }
-    public void Fire()
+    public void Fire(bool pressed)
     {
-        equipWep.GetComponent<Weapon>().Fire(transform, false);
+        equipWep.GetComponent<Weapon>().Fire(transform, pressed);
     }
     // Update is called once per frame
     public void Equip(int weapon)
