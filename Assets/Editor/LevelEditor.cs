@@ -45,7 +45,7 @@ public class LevelEditor : Editor
             var children = new List<GameObject>();
             foreach (Transform child in mapGen.transform) children.Add(child.gameObject);
             children.ForEach(child => DestroyImmediate(child));
-            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/HitBack.prefab", typeof(GameObject));
+            Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/HitBack.prefab", typeof(GameObject));
             GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
             clone.transform.SetParent(mapGen.transform);
             clone.layer = 9;

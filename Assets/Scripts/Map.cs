@@ -12,7 +12,7 @@ public class Map : MonoBehaviour, IMapper
     {
         int _width = tileGrid.GetLength(0);
         int _height = tileGrid.GetLength(1);
-        Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Walls.prefab", typeof(GameObject));
+        Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/Walls.prefab", typeof(GameObject));
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)

@@ -1,8 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+[System.Serializable]
+public struct Sounds
+{
+    public AudioClip fire;
+    public AudioClip reload;
+    public AudioSource audioSource;
+}
+[RequireComponent(typeof(AudioSource))]
 public class Weapon : MonoBehaviour
 {
+    public Sounds sounds;
     public float reloadTime;
     public float triggerDelay;
     protected float lastFired;
@@ -26,20 +34,22 @@ public class Weapon : MonoBehaviour
     {
         if (!reloading)
         {
+            sounds.audioSource.PlayOneShot(sounds.reload, .05f);
             reloading = true;
             StartCoroutine(Reloading());
         }
     }
-    public virtual GameObject Fire(Transform playerLoc)
+    public virtual GameObject Fire(Transform playerLoc, bool pressed)
     {
         if (bullets == 0 && capacity != 0)
-        {
+        {              
             Reload();
             return null;
         }
         if (Time.time - lastFired > triggerDelay)
         {
-            GameObject bullet = Instantiate<GameObject>(ammunition);
+            sounds.audioSource.PlayOneShot(sounds.fire, .05f);
+           GameObject bullet = Instantiate<GameObject>(ammunition);
             bullet.transform.position = playerLoc.position;
             Physics.IgnoreCollision(bullet.GetComponent<Collider>(), playerLoc.GetComponent<Collider>());
             lastFired = Time.time;

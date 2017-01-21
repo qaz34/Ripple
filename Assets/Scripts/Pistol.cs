@@ -3,11 +3,14 @@ using System.Collections;
 
 public class Pistol : Weapon
 {
-    public override GameObject Fire(Transform playerLoc)
+    public override GameObject Fire(Transform playerLoc, bool pressed)
     {
-        GameObject bullet = base.Fire(playerLoc);
-        if (bullet != null)
-            bullet.GetComponent<Rigidbody>().AddForce(playerLoc.forward * speed, ForceMode.Impulse);
+        if (!pressed)
+        {
+            GameObject bullet = base.Fire(playerLoc, pressed);
+            if (bullet != null)
+                bullet.GetComponent<Rigidbody>().AddForce(playerLoc.forward * speed, ForceMode.Impulse);
+        }
         return null;
     }
 }
