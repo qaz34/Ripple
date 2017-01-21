@@ -12,7 +12,7 @@ public class LevelEditor : Editor
     SerializedProperty gridArray;
     public void OnEnable()
     {
-        mapGen = (Map)target;      
+        mapGen = (Map)target;
     }
     void OnSceneGUI()
     {
@@ -34,14 +34,11 @@ public class LevelEditor : Editor
         serializedObject.Update();
         GUILayout.BeginHorizontal();
 
-        GUILayout.Label(new GUIContent("Map height", "The height of the map"));
-        mapGen.height = EditorGUILayout.IntSlider(mapGen.height + mapGen.height % 2, 2, 30);
+        GUILayout.Label(new GUIContent("Map height and width", "The height of the map"));
+        mapGen.height = EditorGUILayout.IntSlider(mapGen.height + mapGen.height % 2, 2, 100);
+        mapGen.width = mapGen.height;
         GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label(new GUIContent("Map width", "The width of the map"));
-        mapGen.width = EditorGUILayout.IntSlider(mapGen.width - mapGen.width % 2, 2, 30);
-        GUILayout.EndHorizontal();
 
         if (GUILayout.Button(new GUIContent("Generate Map", "Some background stuff")))
         {
@@ -54,8 +51,10 @@ public class LevelEditor : Editor
             clone.layer = 8;
             clone.GetComponent<BoxCollider>().size = new Vector3(mapGen.width, mapGen.height);
             mapGen.SetBoolArray();
+            Transform wave = GameObject.FindGameObjectWithTag("Wave").transform;
+            wave.localScale = new Vector3((float)mapGen.width / 10, 0, (float)mapGen.height / 10);
         }
         SceneView.RepaintAll();
-        
+
     }
 }
