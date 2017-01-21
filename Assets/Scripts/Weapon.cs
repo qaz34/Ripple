@@ -10,6 +10,7 @@ public struct Sounds
 [RequireComponent(typeof(AudioSource))]
 public class Weapon : MonoBehaviour
 {
+    public string gunName;
     public Sounds sounds;
     public float reloadTime;
     public float triggerDelay;
@@ -18,10 +19,9 @@ public class Weapon : MonoBehaviour
     public float speed;
     public int capacity;
     public GameObject ammunition;
-    bool reloading;
+    protected bool reloading;
     void Awake()
     {
-        Debug.Log("weapons live");
         bullets = capacity;
     }
     IEnumerator Reloading()
@@ -42,15 +42,15 @@ public class Weapon : MonoBehaviour
     public virtual GameObject Fire(Transform playerLoc, bool pressed)
     {
         if (bullets == 0 && capacity != 0)
-        {              
+        {
             Reload();
             return null;
         }
         if (Time.time - lastFired > triggerDelay)
         {
             sounds.audioSource.PlayOneShot(sounds.fire, .05f);
-           GameObject bullet = Instantiate<GameObject>(ammunition);
-			bullet.layer = playerLoc.gameObject.layer;
+            GameObject bullet = Instantiate<GameObject>(ammunition);
+            bullet.layer = playerLoc.gameObject.layer;
             bullet.transform.position = playerLoc.position;
             lastFired = Time.time;
             bullets--;
