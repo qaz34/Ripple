@@ -39,6 +39,9 @@ public class LevelEditor : Editor
         mapGen.width = mapGen.height;
         GUILayout.EndHorizontal();
 
+        GUILayout.BeginHorizontal();
+        mapGen.wallTile = (GameObject)EditorGUILayout.ObjectField("Wall Tile", mapGen.wallTile, typeof(GameObject), true);
+        GUILayout.EndHorizontal();
 
         if (GUILayout.Button(new GUIContent("Generate Map", "Some background stuff")))
         {

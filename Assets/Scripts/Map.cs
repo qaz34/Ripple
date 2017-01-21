@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 [System.Serializable]
 public class Map : MonoBehaviour, IMapper
 {
@@ -8,18 +7,18 @@ public class Map : MonoBehaviour, IMapper
     public int height;
     [SerializeField]
     public bool[] m_tileGrid;
+    public GameObject wallTile;
     void Start()
     {
         int _width = tileGrid.GetLength(0);
-        int _height = tileGrid.GetLength(1);
-        Object prefab = AssetDatabase.LoadAssetAtPath("Assets/Prefabs/Map/Walls.prefab", typeof(GameObject));
+        int _height = tileGrid.GetLength(1);        
         for (int x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 if (tileGrid[x, y])
                 {
-                    GameObject clone = Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
+                    GameObject clone = Instantiate(wallTile, Vector3.zero, Quaternion.identity) as GameObject;
                     clone.transform.SetParent(transform);
                     clone.transform.position = new Vector3(x + .5f - _width / 2, y + .5f - _height / 2);
                 }
