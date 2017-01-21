@@ -16,6 +16,8 @@ public class WaveSim : MonoBehaviour {
 	public int deltaSScale = 10;
 	public float decayFactor = 0.99f;
 	public float timeScale = 2;
+	public float wallConductivity = 0.01f;
+	public float spaceConductivity = 1;
 	private Texture2D tex;
 	private byte[] texBytes;
 	WaveUnit[,] waveGrid;
@@ -36,19 +38,19 @@ public class WaveSim : MonoBehaviour {
 				if (map.tileGrid [i, j]) {
 					for (int k = 0; k < deltaSScale; k++) {
 						for (int l = 0; l < deltaSScale; l++) {
-							waveGrid [i * deltaSScale + k, j * deltaSScale + l].conductivity = 0.2f;
+							waveGrid [i * deltaSScale + k, j * deltaSScale + l].conductivity = wallConductivity;
 						}
 					}
 				} else {
 					for (int k = 0; k < deltaSScale; k++) {
 						for (int l = 0; l < deltaSScale; l++) {
-							waveGrid [i * deltaSScale + k, j * deltaSScale + l].conductivity = 1f;
+							waveGrid [i * deltaSScale + k, j * deltaSScale + l].conductivity = spaceConductivity;
 						}
 					}
 				}
 			}
 		}
-		Disturb (1, waveGrid.GetLength (0) / 2, waveGrid.GetLength (1) / 2);
+		//Disturb (1, waveGrid.GetLength (0) / 2, waveGrid.GetLength (1) / 2);
 	}
 
 	// Update is called once per frame
@@ -70,7 +72,7 @@ public class WaveSim : MonoBehaviour {
 				if (waveGrid [i, j].magnitude > 1) {
 					print (waveGrid [i, j].magnitude);
 				}
-				texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(waveGrid [i, j].magnitude * 255);
+				texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(254.53f/(1 + (25.35f*Mathf.Exp(-9.17f*waveGrid[i,j].magnitude))));
 			}
 		}
 
@@ -82,5 +84,12 @@ public class WaveSim : MonoBehaviour {
 	public void Disturb (float amount, int x, int y)
 	{
 		waveGrid [x, y].magnitude = amount;
+	}
+
+	public void Disturb (float amount, Vector3 worldPos)
+	{
+		Vector3 local = new Vector3(worldPos.x + (map.tileGrid.GetLength(0) * map.scaleFactor * 0.5f), worldPos.y + (map.tileGrid.GetLength(1) * map.scaleFactor * 0.5f));
+		local *= deltaSScale;
+		waveGrid [(int)local.x, (int)local.y].magnitude = amount;
 	}
 }

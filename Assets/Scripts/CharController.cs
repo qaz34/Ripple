@@ -1,28 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+[RequireComponent(typeof(CharacterController))]
 public class CharController : MonoBehaviour
 {
     public float speed = 10;
-    Rigidbody2D m_rb;
+    CharacterController m_cc;
+	WaveSim ws; 
     Vector3 move;
+	float timer = 0;
+	public float stepFreq = 0.2f;
+	public float stepIntensity = 0.5f;
     // Use this for initialization
     void Start()
     {
-        m_rb = GetComponent<Rigidbody2D>();
+        m_cc = GetComponent<CharacterController>();
+		ws = GameObject.FindGameObjectWithTag ("Wave").GetComponent<WaveSim>();
     }
 
     // Update is called once per frame
     void Update()
     {
+		move = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"), 0).normalized * Time.deltaTime * speed;
+		m_cc.Move (move);
+		transform.position.Set (transform.position.x, transform.position.y, 0);
+		if (move.magnitude > 0) {
+			timer += Time.deltaTime;
+		}
+		if (timer > stepFreq) {
+			timer -= stepFreq;
+			ws.Disturb (stepIntensity, transform.position);
+		}
 
-        move *= Time.deltaTime * speed;
-        move = transform.position + move;
-
-    }
-    void FixedUpdate()
-    {
-        move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
-        m_rb.velocity = move * Time.fixedDeltaTime * speed;
-    }
+	}
 }
