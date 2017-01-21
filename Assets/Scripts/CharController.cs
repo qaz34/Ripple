@@ -55,18 +55,18 @@ public class CharController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(move.normalized);
         if (GetComponent<WeaponControler>() != null)
         {
-            if (device.RightTrigger.IsPressed)
+			if (device.RightBumper.IsPressed)
             {
                 GetComponent<WeaponControler>().Fire(pressed);
                 pressed = true;
             }
-            else if (device.RightTrigger.WasReleased)
+			else if (device.RightBumper.WasReleased)
             {
                 pressed = false;
             }
-            if (device.LeftBumper.WasPressed || device.RightBumper.WasPressed)
+			if (device.Action2.WasPressed || device.Action1.WasPressed)
             {
-                GetComponent<WeaponControler>().Equip((int)(device.RightBumper.Value-device.LeftBumper.Value));
+                GetComponent<WeaponControler>().Equip((int)(device.Action2.Value-device.Action1.Value));
             }
         }
     }
