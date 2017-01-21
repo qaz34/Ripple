@@ -31,9 +31,17 @@ public class CharController : MonoBehaviour
         }
         if (timer > stepFreq)
         {
-            timer -= stepFreq;
+            timer = 0;
             ws.Disturb(stepIntensity, transform.position);
         }
-
+        if (move.normalized.magnitude != 0)
+            transform.rotation = Quaternion.LookRotation(move.normalized);
+        if (GetComponent<WeaponControler>() != null)
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                GetComponent<WeaponControler>().Fire();
+            }
+        }
     }
 }
