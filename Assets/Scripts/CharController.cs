@@ -12,17 +12,17 @@ public class CharController : MonoBehaviour
     float timer = 0;
     public float stepFreq = 0.2f;
     public float stepIntensity = 0.5f;
+	public int player = 1;
     // Use this for initialization
     void Start()
     {
         m_cc = GetComponent<CharacterController>();
         ws = GameObject.FindGameObjectWithTag("Wave").GetComponent<WaveSim>();
     }
-
     // Update is called once per frame
     void Update()
     {
-        move = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized * Time.deltaTime * speed;
+		move = new Vector3(Input.GetAxis("Horizontal" + player.ToString()), Input.GetAxis("Vertical" + player.ToString()), 0).normalized * Time.deltaTime * speed;
         m_cc.Move(move);
         transform.position.Set(transform.position.x, transform.position.y, 0);
         if (move.magnitude > 0)
@@ -34,11 +34,12 @@ public class CharController : MonoBehaviour
             timer = 0;
             ws.Disturb(stepIntensity, transform.position);
         }
-        if (move.normalized.magnitude != 0)
-            transform.rotation = Quaternion.LookRotation(move.normalized);
+		Vector3 aim = new Vector3 (Input.GetAxis ("AimHorizontal" + player.ToString ()), Input.GetAxis("AimVertical" + player.ToString()));
+        if (aim.normalized.magnitude != 0)
+            transform.rotation = Quaternion.LookRotation(aim.normalized);
         if (GetComponent<WeaponControler>() != null)
         {
-            if (Input.GetButtonDown("Fire1"))
+			if (Input.GetButtonDown("Fire1" + player.ToString()))
             {
                 GetComponent<WeaponControler>().Fire();
             }
