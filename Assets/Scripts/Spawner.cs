@@ -9,22 +9,29 @@ public class Spawner : MonoBehaviour {
 	CharController[] players;
 	public int[] scores;
 	bool[] spawning;
+	bool[] coroutineCalled;
 	public float respawnTime;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		players = new CharController[2];
 		scores = new int[2];
 		spawning = new bool[2];
+		coroutineCalled = new bool[2];
+		spawning [0] = spawning [1] = coroutineCalled[0] = coroutineCalled[1] = true;
 		ws = GameObject.FindGameObjectWithTag ("Wave").GetComponent<WaveSim> ();
 		map = GameObject.FindGameObjectWithTag ("Map").GetComponent<Map>();
-		spawning [0] = true;
-		spawning [1] = true;
+		StartCoroutine(spawn (0));
+		StartCoroutine(spawn (1));
 	}
 
 
-	void spawn (int player)
+	IEnumerator spawn (int player, bool delay = false)
 	{
+		if (delay)
+			yield return new WaitForSeconds (respawnTime);
+		else
+			yield return null;
 		bool needValidLocation = true;
 		int x = 0;
 		int y = 0;
@@ -47,9 +54,18 @@ public class Spawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		for (int i = 0; i < spawning.Length; i++) {
-			if(spawning[i])
-				spawn(i);
+		for (int i = 0; i < players.Length; i++) {
+			if (players [i] == null && !spawning[i]) {
+				scores [(i + 1) % 2]++;
+				spawning [i] = true;
+			}
+
+			if (spawning [i] && !coroutineCalled [i]) {
+				StartCoroutine (spawn (i, true));
+				coroutineCalled [i] = true;
+			}
+			
 		}
+
 	}
 }
