@@ -47,9 +47,7 @@ public class CharController : MonoBehaviour
             }
             if (Input.GetButtonDown("Swap" + player.ToString()))
             {
-                Weapon wep = GetComponent<WeaponControler>().Equip((int)Input.GetAxisRaw("Swap" + player.ToString()));
-                Destroy(GetComponentInChildren<Weapon>().gameObject);
-                Instantiate(wep, transform);
+                GetComponent<WeaponControler>().Equip((int)Input.GetAxisRaw("Swap" + player.ToString()));
             }
         }
     }

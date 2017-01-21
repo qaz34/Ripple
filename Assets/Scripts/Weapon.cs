@@ -6,13 +6,14 @@ public class Weapon : MonoBehaviour
     public float reloadTime;
     public float triggerDelay;
     protected float lastFired;
-    protected int bullets;
+    public int bullets;
     public float speed;
     public int capacity;
     public GameObject ammunition;
     bool reloading;
-    void Start()
+    void Awake()
     {
+        Debug.Log("weapons live");
         bullets = capacity;
     }
     IEnumerator Reloading()
@@ -29,7 +30,7 @@ public class Weapon : MonoBehaviour
             StartCoroutine(Reloading());
         }
     }
-    public virtual GameObject Fire()
+    public virtual GameObject Fire(Transform playerLoc)
     {
         if (bullets == 0 && capacity != 0)
         {
@@ -39,8 +40,8 @@ public class Weapon : MonoBehaviour
         if (Time.time - lastFired > triggerDelay)
         {
             GameObject bullet = Instantiate<GameObject>(ammunition);
-            bullet.transform.position = transform.position;
-            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), GetComponentInParent<Collider>());
+            bullet.transform.position = playerLoc.position;
+            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), playerLoc.GetComponent<Collider>());
             lastFired = Time.time;
             bullets--;
             return bullet;
