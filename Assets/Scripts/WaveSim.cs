@@ -72,7 +72,13 @@ public class WaveSim : MonoBehaviour {
 				if (waveGrid [i, j].magnitude > 1) {
 					print (waveGrid [i, j].magnitude);
 				}
-				texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(254.53f/(1 + (25.35f*Mathf.Exp(-9.17f*waveGrid[i,j].magnitude))));
+				if (waveGrid [i, j].magnitude < 0.01f) {
+					texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(0);
+				} else {
+					texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(500*waveGrid[i,j].magnitude);
+				}
+				//texBytes [((i + (j * waveGrid.GetLength (1))) * 4) + 3] = (byte)(254.53f/(1 + (25.35f*Mathf.Exp(-9.17f*waveGrid[i,j].magnitude))));
+
 			}
 		}
 
